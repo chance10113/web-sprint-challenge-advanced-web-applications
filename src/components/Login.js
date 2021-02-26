@@ -7,18 +7,57 @@ const Login = () => {
     password: "",
   };
   const [userCredentials, setUserCredentials] = useState(initUserCredentials);
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
+
+ 
+    const handleChange = (e) => {
+      setUserCredentials({
+        ...userCredentials,
+        [e.target.name]: e.target.value,
+      });
+    };
+  
+
+  const login = (e) => {
+    e.preventDefault();
+    if (!e.target.username || !e.target.password) {
+      alert("Username or Password not valid");
+    } else {
+      axios
+        .post("http://localhost:5000/api/login", userCredentials)
+        .then((res) => {
+          localStorage.setItem("token", res.data.payload);
+          window.location.href = "/protected";
+        })
+        .catch((error) => {
+          console.log("login error", error);
+        });
+    }
+  };
 
   useEffect(() => {
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route at the path "/bubbles"
+    axios
+      .delete(`http://localhost:5000/api/colors/1`, {
+        headers: {
+          authorization:
+            "ahuBHejkJJiMDhmODZhZi0zaeLTQ4ZfeaseOGZgesai1jZWYgrTA07i73Gebhu98",
+        },
+      })
+      .then((res) => {
+        axios.get("http://localhost:5000/api/colors", {
+          headers: {
+            authorization: "",
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
 
   return (
     <div className="container">
       <h1> Welcome to the Bubble App!</h1>
-      <form className="login-form">
+      <form className="login-form" onSubmit={login}>
         <label>
           username
           <input
@@ -26,7 +65,7 @@ const Login = () => {
             placeholder="enter a username"
             name="username"
             value={userCredentials.username}
-            // onChange={handleChange}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -36,7 +75,7 @@ const Login = () => {
             placeholder="enter a password"
             name="password"
             value={userCredentials.password}
-            // onChange={handleChange}
+            onChange={handleChange}
           />
         </label>
 
