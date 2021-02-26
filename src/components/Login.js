@@ -1,37 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const Login = () => {
+  const initUserCredentials = {
+    username: "",
+    password: "",
+  };
+  const [userCredentials, setUserCredentials] = useState(initUserCredentials);
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  useEffect(()=>{
-    axios
-      .delete(`http://localhost:5000/api/colors/1`, {
-        headers:{
-          'authorization': "ahuBHejkJJiMDhmODZhZi0zaeLTQ4ZfeaseOGZgesai1jZWYgrTA07i73Gebhu98"
-        }
-      })
-      .then(res=>{
-        axios.get(`http://localhost:5000/api/colors`, {
-          headers:{
-            'authorization': ""
-          }
-        })
-        .then(res=> {
-          console.log(res);
-        });
-        console.log(res);
-      })
+  useEffect(() => {
+    // make a post request to retrieve a token from the api
+    // when you have handled the token, navigate to the BubblePage route at the path "/bubbles"
   });
 
   return (
-    <>
-      <h1>
-        Welcome to the Bubble App!
-        <p>Build a login page here</p>
-      </h1>
-    </>
+    <div className="container">
+      <h1> Welcome to the Bubble App!</h1>
+      <form className="login-form">
+        <label>
+          username
+          <input
+            type="text"
+            placeholder="enter a username"
+            name="username"
+            value={userCredentials.username}
+            // onChange={handleChange}
+          />
+        </label>
+        <label>
+          password
+          <input
+            type="password"
+            placeholder="enter a password"
+            name="password"
+            value={userCredentials.password}
+            // onChange={handleChange}
+          />
+        </label>
+
+        <button className="submitBtn"> Log In </button>
+      </form>
+    </div>
   );
 };
 

@@ -18,3 +18,5 @@ export default App;
 
 //Task List:
 //1. Render BubblePage as a PrivateRoute
+
+// WANTS US to use localHistory/Authorization with Private Route
