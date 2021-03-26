@@ -1,25 +1,66 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
-
-  useEffect(()=>{
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route
+  const [userCredentials, setUserCredentials] = useState({
+    username: "",
+    password: "",
+    error: "",
   });
-  
-  const error = "";
-  //replace with error state
+  const history = useHistory();
+
+  const onChange = (e) => {
+    setUserCredentials({ ...userCredentials, [e.target.name]: e.target.value });
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:5000/api/login", userCredentials)
+      .then((res) => {
+        localStorage.setItem("token", res.data.payload);
+        history.push("/colors");
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setUserCredentials({
+          ...userCredentials,
+          error: "Username or Password not valid.",
+        });
+      });
+  };
 
   return (
     <div>
       <h1>Welcome to the Bubble App!</h1>
-      <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
-      </div>
-
-      <p data-testid="errorMessage" className="error">{error}</p>
+      <form data-testid="loginForm" className="login-form" onSubmit={onSubmit}>
+        <h2>Login Here</h2>
+        <label>
+          Username
+          <input
+            type="text"
+            name="username"
+            onChange={onChange}
+            value={userCredentials.username}
+            data-testid="username"
+          />
+        </label>
+        <br></br>
+        <br></br>
+        <label>
+          Password
+          <input
+            type="password"
+            name="password"
+            onChange={onChange}
+            value={userCredentials.password}
+            data-testid="password"
+          />
+        </label>
+        <br></br>
+        {userCredentials.error && <p>{userCredentials.error}</p>}
+        <button>Login</button>
+      </form>
     </div>
   );
 };
